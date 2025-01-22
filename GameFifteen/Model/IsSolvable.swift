@@ -24,13 +24,8 @@ extension Field {
         let emptyRowFromBottom = size - emptyTile!.row
         
         if size % 2 == 0 {
-            print("\nПоле четное. Инверсий \(inversions), позиция нуля снизу \(emptyRowFromBottom)")
-            printField()
-//            return (inversions % 2 != 0) && (emptyRowFromBottom % 2 == 0)
             return ((inversions % 2 != 0) && (emptyRowFromBottom % 2 == 0)) || ((inversions % 2 == 0) && (emptyRowFromBottom % 2 != 0))
         } else {
-            print("\nПоле нечетное. Инверсий \(inversions)")
-            printField()
             return inversions % 2 == 0
         }
     }

@@ -13,6 +13,7 @@ struct ContentView: View {
     @State private var filedSolved: Bool = false
     @State private var LevelSelect: Bool = false
     @State private var moveCount: Int = 0
+    @StateObject private var records = Records.shared
     
     var body: some View {
         
@@ -35,9 +36,15 @@ struct ContentView: View {
                 
                 Spacer()
                 
-                Text("Рекорд поля: XXX. Сейчас: \(moveCount) ходов")
-                    .foregroundStyle(Color.white)
-                    .padding(30)
+                if records.recordTable[field.size - 2] == 0 {
+                    Text("Рекорда еще нет. Сейчас - \(moveCount) ходов")
+                        .foregroundStyle(Color.white)
+                        .padding(30)
+                } else {
+                    Text("Рекорд поля - \(records.recordTable[field.size - 2]). Сейчас - \(moveCount) ходов")
+                        .foregroundStyle(Color.white)
+                        .padding(30)
+                }
                 
                 HStack {
                     Button {
@@ -71,6 +78,7 @@ struct ContentView: View {
             
             GeometryReader { geometry in
                 let tileSize = geometry.size.width / CGFloat(field.size) // Размер плитки
+                let padding: CGFloat = CGFloat(10 - field.size)
                 
                 ZStack {
                     ForEach(field.tiles) { tile in
@@ -79,7 +87,7 @@ struct ContentView: View {
                             Rectangle()
                                 .fill(isHome ? color2 : color5)
                                 .cornerRadius(CGFloat(40 / field.size))
-                                .frame(width: tileSize - 5, height: tileSize - 5)
+                                .frame(width: tileSize - padding, height: tileSize - padding)
                                 .overlay(
                                     Text("\(tile.value)")
                                         .foregroundColor(.white)
@@ -102,13 +110,19 @@ struct ContentView: View {
             }
             .alert("Поле \(field.size)x\(field.size) пройдено", isPresented: $filedSolved) {
                 Button("OK", role: .cancel) {
+                    if moveCount < Records.shared.recordTable[field.size - 2] || Records.shared.recordTable[field.size - 2] == 0 {
+                        Records.shared.recordTable[field.size - 2] = moveCount
+                        Records.shared.saveRecord()
+                    }
                     field.size = min(field.size + 1, 6)
                     moveCount = 0
                     field.newGame()
                 }
+            } message: {
+                Text("На прохождение потрачено \(moveCount) ходов!")
             }
+            
             .alert("Выберите уровень", isPresented: $LevelSelect) {
-                // Кнопки для каждого уровня
                 Button("Поле 2х2") { field.size = 2
                     moveCount = 0
                     field.newGame()}

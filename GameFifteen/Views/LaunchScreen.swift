@@ -34,6 +34,8 @@ struct LaunchScreenView: View {
                     }
                     DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
                         withAnimation {
+//                            Records.shared.deleteRecord()
+                            Records.shared.loadRecord()
                             self.isFirstLaunch = false
                         }
                     }

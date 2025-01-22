@@ -48,39 +48,6 @@ struct Field {
                 tiles[i].col = i % size
                 tiles[i].row = i / size
             }
-        } while !isSolvable()
-        
-        //        if size > 2 {
-        //            repeat {
-        //                tiles.shuffle()
-        //                for i in 0..<size * size {
-        //                    tiles[i].col = i % size
-        //                    tiles[i].row = i / size
-        //                }
-        //            } while !isSolvable()
-        //        } else {
-        //            tiles[0].col = 1 // 1
-        //            tiles[0].row = 1
-        //            tiles[1].col = 0 // 2
-        //            tiles[1].row = 1
-        //            tiles[2].col = 0 // 3
-        //            tiles[2].row = 0
-        //            tiles[3].col = 1 // 0
-        //            tiles[3].row = 0
-        //        }
-    }
-    
-    //    mutating func moveTile(at index: Int, toRow newRow: Int, toCol newCol: Int) {
-    //        tiles[index].row = newRow
-    //        tiles[index].col = newCol
-    //    }
-    
-    func printField() {
-        for row in 0..<size {
-            for col in 0..<size {
-                print(tiles[row * size + col].value, terminator: " ")
-            }
-            print()
-        }
+        } while !isSolvable() || tableSolved()
     }
 }
